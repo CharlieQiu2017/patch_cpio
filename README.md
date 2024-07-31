@@ -37,6 +37,7 @@ To create a reproducible archive of a (non-root, non-empty) directory `dir`, use
 ```bash
 cd dir
 find . -print0 | tail -z -n +2 | LC_ALL=C sort -z | (cpio -o -0 -H newc > ../archive.cpio)
+patch_cpio ../archive.cpio
 ```
 
 We first list the directory content using `find`.
@@ -44,6 +45,7 @@ The first entry `find` emits is usually just `.` itself which should be removed.
 The remaining entries are sorted to ensure deterministic order of files.
 We add `LC_ALL=C` to eliminate any influence of locale on sorting.
 Finally, the list of files is piped to `cpio` for archiving.
+The output is patched using our gadget.
 
 ## Implementation
 
